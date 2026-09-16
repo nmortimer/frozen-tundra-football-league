@@ -694,48 +694,46 @@ function TeamPage({
   return (
     <>
       <header className="page-header">
-        <div className="page-header-top">
-          <div className="team-identity">
-            <img className="team-logo" src={team.logo} alt={`${team.name} logo`} />
-            <h1>{team.name}</h1>
-          </div>
-          <div className="color-legend">
-            <span className="legend-title">Team colors</span>
-            <div className="swatch-row">
-              <div className="swatch-item">
-                <span className="swatch-block" style={{ background: team.accent }} />
-                <span className="swatch-name">Primary</span>
-                <span className="swatch-hex">{team.accent}</span>
-              </div>
-              <div className="swatch-item">
-                <span className="swatch-block" style={{ background: team.accent2 }} />
-                <span className="swatch-name">Secondary</span>
-                <span className="swatch-hex">{team.accent2}</span>
-              </div>
-              <div className="swatch-item">
-                <span className="swatch-block" style={{ background: team.bg }} />
-                <span className="swatch-name">Base</span>
-                <span className="swatch-hex">{team.bg}</span>
-              </div>
-            </div>
-          </div>
+        <div className="team-identity">
+          <img className="team-logo" src={team.logo} alt={`${team.name} logo`} />
+          <h1>{team.name}</h1>
         </div>
 
         {team.stadium ? (
-          <div className="stadium-banner">
-            <img className="stadium-banner-img" src={team.stadium.image} alt={team.stadium.name} />
-            <div className="stadium-banner-caption">
-              <span className="stadium-banner-name">{team.stadium.name}</span>
-              <span className="stadium-banner-capacity">Capacity: {team.stadium.capacity.toLocaleString()}</span>
+          <div className="stadium-inline">
+            <img className="stadium-inline-img" src={team.stadium.image} alt={team.stadium.name} />
+            <div className="stadium-inline-caption">
+              <span className="stadium-inline-name">{team.stadium.name}</span>
+              <span className="stadium-inline-capacity">Capacity: {team.stadium.capacity.toLocaleString()}</span>
             </div>
           </div>
         ) : (
-          <div className="stadium-banner stadium-banner-placeholder">
+          <div className="stadium-inline stadium-inline-placeholder">
             <span>Stadium art — coming soon</span>
           </div>
         )}
-      </header>
 
+        <div className="color-legend">
+          <span className="legend-title">Team colors</span>
+          <div className="swatch-row">
+            <div className="swatch-item">
+              <span className="swatch-block" style={{ background: team.accent }} />
+              <span className="swatch-name">Primary</span>
+              <span className="swatch-hex">{team.accent}</span>
+            </div>
+            <div className="swatch-item">
+              <span className="swatch-block" style={{ background: team.accent2 }} />
+              <span className="swatch-name">Secondary</span>
+              <span className="swatch-hex">{team.accent2}</span>
+            </div>
+            <div className="swatch-item">
+              <span className="swatch-block" style={{ background: team.bg }} />
+              <span className="swatch-name">Base</span>
+              <span className="swatch-hex">{team.bg}</span>
+            </div>
+          </div>
+        </div>
+      </header>
 
       {isCommissioner && (
         <div className="commissioner-bar">
