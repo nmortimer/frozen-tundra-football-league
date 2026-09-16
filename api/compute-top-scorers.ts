@@ -124,8 +124,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       );
 
       for (const box of boxscores) {
-        const awayId = box?.game?.awayTeam?.id ?? box?.away?.team?.id;
-        const homeId = box?.game?.homeTeam?.id ?? box?.home?.team?.id;
+        // CONFIRMED against a real response: team identity lives at
+        // box.game.away.id / box.game.home.id — the SAME naming
+        // convention already confirmed on FetchLeagueScoreboard's game
+        // objects (away/home, not awayTeam/homeTeam or a nested .team.id,
+        // which is what an earlier version of this code wrongly guessed,
+        // and why every boxscore silently produced zero points).
+        const awayId = box?.game?.away?.id;
+        const homeId = box?.game?.home?.id;
         if (awayId) processSide(awayId, box?.away);
         if (homeId) processSide(homeId, box?.home);
       }
