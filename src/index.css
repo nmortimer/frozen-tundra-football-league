@@ -95,21 +95,15 @@ body {
 
 .page-header {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
   gap: 14px;
   margin-bottom: 20px;
   padding: 18px;
   background: var(--accent);
   border-radius: 16px;
   border: 2px solid var(--accent2);
-}
-
-.page-header-top {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
 }
 
 .summary-header {
@@ -152,60 +146,62 @@ body {
   white-space: nowrap;
 }
 
-/* --- Stadium banner: full-width, sized for landscape art --- */
-.stadium-banner {
+/* --- Stadium: fixed-size, inline between team identity and colors --- */
+.stadium-inline {
   position: relative;
-  width: 100%;
-  height: 220px;
+  width: 280px;
+  height: 140px;
+  flex-shrink: 0;
   border-radius: 12px;
   border: 1.5px solid var(--accent2);
   overflow: hidden;
 }
 
-.stadium-banner-img {
+.stadium-inline-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 35%; /* stadium art tends to have its most interesting detail upper-middle, not the crowd/foreground */
+  object-position: center 35%;
   display: block;
 }
 
-.stadium-banner-caption {
+.stadium-inline-caption {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   display: flex;
-  align-items: baseline;
-  gap: 10px;
-  padding: 10px 16px;
+  flex-direction: column;
+  gap: 1px;
+  padding: 6px 10px;
   background: linear-gradient(to top, rgba(0,0,0,0.75), rgba(0,0,0,0));
 }
 
-.stadium-banner-name {
-  font-size: 15px;
+.stadium-inline-name {
+  font-size: 12px;
   font-weight: 700;
   color: #ffffff;
 }
 
-.stadium-banner-capacity {
-  font-size: 12px;
+.stadium-inline-capacity {
+  font-size: 10px;
   font-weight: 500;
   color: rgba(255,255,255,0.85);
 }
 
-.stadium-banner-placeholder {
+.stadium-inline-placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
   border: 1.5px dashed var(--accent2);
   background: rgba(0,0,0,0.22);
-  height: 100px;
 }
 
-.stadium-banner-placeholder span {
-  font-size: 13px;
+.stadium-inline-placeholder span {
+  font-size: 11px;
   color: var(--on-accent);
+  text-align: center;
+  padding: 0 10px;
 }
 
 /* --- Color legend: primary/secondary/base swatches with hex --- */
