@@ -42,6 +42,7 @@ body {
 
 .team-rail {
   display: flex;
+  align-items: center;
   gap: 8px;
   margin-bottom: 20px;
   flex-wrap: wrap;
@@ -95,7 +96,8 @@ body {
 .page-header {
   display: flex;
   flex-wrap: wrap;
-  align-items: stretch;
+  align-items: center;
+  justify-content: space-between;
   gap: 14px;
   margin-bottom: 20px;
   padding: 18px;
@@ -667,7 +669,7 @@ td.num {
 /* --- Team page two-column layout: roster left, history/reserves right --- */
 .team-page-columns {
   display: grid;
-  grid-template-columns: 1fr 360px;
+  grid-template-columns: 1fr 1fr;
   gap: 20px;
   align-items: start;
 }
