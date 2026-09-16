@@ -71,11 +71,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     byName.set(playerName, (byName.get(playerName) ?? 0) + points);
   }
 
-  // Diagnostic sample — captures the first real player slot seen, so if
-  // totals come back all-zero (as happened twice: once from a wrong
-  // team-id field, guessed rather than confirmed), the response itself
-  // shows the real field names instead of needing another manual paste
-  // round-trip to diagnose.
+  // Diagnostic samples — captured unconditionally, regardless of whether
+  // extraction actually succeeds, so a failure response always has
+  // something real to inspect instead of null. sampleBox is the first
+  // raw boxscore seen at all; sampleSlot is the first player slot found
+  // (only set if team-id extraction worked well enough to call
+  // processSide in the first place).
+  let sampleBox: any = null;
   let sampleSlot: any = null;
 
   function processSide(teamId: number, side: any) {
@@ -132,14 +134,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       );
 
       for (const box of boxscores) {
-        // CONFIRMED against a real response: team identity lives at
-        // box.game.away.id / box.game.home.id — the SAME naming
-        // convention already confirmed on FetchLeagueScoreboard's game
-        // objects (away/home, not awayTeam/homeTeam or a nested .team.id,
-        // which is what an earlier version of this code wrongly guessed,
-        // and why every boxscore silently produced zero points).
-        const awayId = box?.game?.away?.id;
-        const homeId = box?.game?.home?.id;
+        if (!sampleBox) sampleBox = box;
+        // FIXED: the boxscore response has NO separate `game` wrapper —
+        // team identity (id, name) lives directly on the same `away`/
+        // `home` objects that also hold the lineup `groups`. The
+        // previous two attempts both assumed a `game.away.id` /
+        // `game.home.id` nesting copied from the scoreboard endpoint's
+        // shape, which doesn't exist here — that's why every boxscore
+        // silently produced zero points twice in a row.
+        const awayId = box?.away?.id;
+        const homeId = box?.home?.id;
         if (awayId) processSide(awayId, box?.away);
         if (homeId) processSide(homeId, box?.home);
       }
@@ -167,7 +171,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const grandTotal = teamTopScorers.reduce((sum, t) => sum + t.scorers.reduce((s, sc) => s + sc.totalPoints, 0), 0);
     if (grandTotal === 0) {
       return res.status(502).json({
-        error: 'Every team/position came back with zero points — refusing to cache this, since it almost certainly means a field name is wrong, not that nobody scored. Raw sample player slot from a real boxscore, for diagnosis:',
+        error: 'Every team/position came back with zero points — refusing to cache this, since it almost certainly means a field name is wrong, not that nobody scored. Raw samples for diagnosis:',
+        sampleBox,
         sampleSlot,
       });
     }
