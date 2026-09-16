@@ -694,45 +694,47 @@ function TeamPage({
   return (
     <>
       <header className="page-header">
-        <div className="team-identity">
-          <img className="team-logo" src={team.logo} alt={`${team.name} logo`} />
-          <h1>{team.name}</h1>
-        </div>
-        <div className="color-legend">
-          <span className="legend-title">Team colors</span>
-          <div className="swatch-row">
-            <div className="swatch-item">
-              <span className="swatch-block" style={{ background: team.accent }} />
-              <span className="swatch-name">Primary</span>
-              <span className="swatch-hex">{team.accent}</span>
-            </div>
-            <div className="swatch-item">
-              <span className="swatch-block" style={{ background: team.accent2 }} />
-              <span className="swatch-name">Secondary</span>
-              <span className="swatch-hex">{team.accent2}</span>
-            </div>
-            <div className="swatch-item">
-              <span className="swatch-block" style={{ background: team.bg }} />
-              <span className="swatch-name">Base</span>
-              <span className="swatch-hex">{team.bg}</span>
+        <div className="page-header-top">
+          <div className="team-identity">
+            <img className="team-logo" src={team.logo} alt={`${team.name} logo`} />
+            <h1>{team.name}</h1>
+          </div>
+          <div className="color-legend">
+            <span className="legend-title">Team colors</span>
+            <div className="swatch-row">
+              <div className="swatch-item">
+                <span className="swatch-block" style={{ background: team.accent }} />
+                <span className="swatch-name">Primary</span>
+                <span className="swatch-hex">{team.accent}</span>
+              </div>
+              <div className="swatch-item">
+                <span className="swatch-block" style={{ background: team.accent2 }} />
+                <span className="swatch-name">Secondary</span>
+                <span className="swatch-hex">{team.accent2}</span>
+              </div>
+              <div className="swatch-item">
+                <span className="swatch-block" style={{ background: team.bg }} />
+                <span className="swatch-name">Base</span>
+                <span className="swatch-hex">{team.bg}</span>
+              </div>
             </div>
           </div>
         </div>
-      </header>
 
-      {team.stadium ? (
-        <div className="stadium-banner">
-          <img className="stadium-banner-img" src={team.stadium.image} alt={team.stadium.name} />
-          <div className="stadium-banner-caption">
-            <span className="stadium-banner-name">{team.stadium.name}</span>
-            <span className="stadium-banner-capacity">Capacity: {team.stadium.capacity.toLocaleString()}</span>
+        {team.stadium ? (
+          <div className="stadium-banner">
+            <img className="stadium-banner-img" src={team.stadium.image} alt={team.stadium.name} />
+            <div className="stadium-banner-caption">
+              <span className="stadium-banner-name">{team.stadium.name}</span>
+              <span className="stadium-banner-capacity">Capacity: {team.stadium.capacity.toLocaleString()}</span>
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="stadium-banner stadium-banner-placeholder">
-          <span>Stadium art — coming soon</span>
-        </div>
-      )}
+        ) : (
+          <div className="stadium-banner stadium-banner-placeholder">
+            <span>Stadium art — coming soon</span>
+          </div>
+        )}
+      </header>
 
 
       {isCommissioner && (
