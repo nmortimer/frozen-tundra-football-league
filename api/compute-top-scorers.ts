@@ -71,6 +71,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     byName.set(playerName, (byName.get(playerName) ?? 0) + points);
   }
 
+  // Diagnostic sample — captures the first real player slot seen, so if
+  // totals come back all-zero (as happened twice: once from a wrong
+  // team-id field, guessed rather than confirmed), the response itself
+  // shows the real field names instead of needing another manual paste
+  // round-trip to diagnose.
+  let sampleSlot: any = null;
+
   function processSide(teamId: number, side: any) {
     const groups: any[] = side?.groups ?? [];
     for (const g of groups) {
@@ -78,6 +85,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       for (const slot of slots) {
         const player = slot?.leaguePlayer?.proPlayer;
         if (!player?.nameFull) continue;
+        if (!sampleSlot) sampleSlot = slot;
         const position: string = player.position ?? slot?.position?.label ?? '';
         const points: number = slot?.leaguePlayer?.viewingActualPoints?.value ?? slot?.leaguePlayer?.points?.value ?? 0;
         addPoints(teamId, position, player.nameFull, points);
@@ -149,6 +157,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
       return { teamSlug: t.slug, scorers };
     });
+
+    // SAFETY GUARD: if every position for every team came back empty,
+    // something is systematically wrong with field extraction (this has
+    // happened before — a wrong team-id field silently produced this
+    // exact all-zero result). Refuse to cache it, and return the raw
+    // sample slot instead so the real field names are visible without
+    // another manual paste round-trip.
+    const grandTotal = teamTopScorers.reduce((sum, t) => sum + t.scorers.reduce((s, sc) => s + sc.totalPoints, 0), 0);
+    if (grandTotal === 0) {
+      return res.status(502).json({
+        error: 'Every team/position came back with zero points — refusing to cache this, since it almost certainly means a field name is wrong, not that nobody scored. Raw sample player slot from a real boxscore, for diagnosis:',
+        sampleSlot,
+      });
+    }
 
     const result: TopScorersResult = {
       computedAtEpochMilli: Date.now(),
