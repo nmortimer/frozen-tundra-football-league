@@ -142,8 +142,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         // `game.home.id` nesting copied from the scoreboard endpoint's
         // shape, which doesn't exist here — that's why every boxscore
         // silently produced zero points twice in a row.
-        const awayId = box?.away?.id;
-        const homeId = box?.home?.id;
+        const awayId = Number(box?.away?.id);
+        const homeId = Number(box?.home?.id);
         if (awayId) processSide(awayId, box?.away);
         if (homeId) processSide(homeId, box?.home);
       }
